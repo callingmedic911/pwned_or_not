@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html_view/flutter_html_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -103,7 +104,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.grey,
                   ),
                 ),
-                onTap: () => null,
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutPage()),
+                ),
               ),
             ],
           ),
@@ -130,6 +134,10 @@ class _MyHomePageState extends State<MyHomePage> {
             "Enter your email in search bar",
             style: TextStyle(color: Colors.black38),
           ),
+          Text(
+            "to find breaches",
+            style: TextStyle(color: Colors.black38),
+          ),
         ],
       );
     }
@@ -137,6 +145,25 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> homeWidgets = List();
     homeWidgets.add(getResultOverview(_breachList?.length ?? 0, _pasteList?.length ?? 0));
     homeWidgets.addAll(getBreachWidgets());
+
+    if ((!_loadingBreachList && !_loadingPasteList)
+        && (_breachList.length ?? 0) == 0
+        && (_pasteList.length ?? 0) == 0) {
+      homeWidgets.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Padding(padding: EdgeInsets.only(top: 32.0)),
+              Icon(Icons.thumb_up, size: 140.0, color: Colors.black26,),
+              Text(
+                "All well and good.",
+                style: TextStyle(color: Colors.black38),
+              ),
+            ],
+          )
+      );
+    }
 
     homeWidgets.add(Center(
         child: Container(
@@ -167,8 +194,10 @@ class _MyHomePageState extends State<MyHomePage> {
       return breachWidgets;
     }
 
-    breachWidgets.add(Heading("Breaches"));
-    breachWidgets.add(Description("A \"breach\" is an incident where data has been unintentionally exposed to the public."));
+    if (_loadingBreachList || (_breachList?.length ?? 0) > 0) {
+      breachWidgets.add(Heading("Breaches"));
+      breachWidgets.add(Description("A \"breach\" is an incident where data has been unintentionally exposed to the public."));
+    }
 
     if (_loadingBreachList) {
       breachWidgets.addAll(List.generate(2, (int index) => ShimmerCard()));
@@ -187,8 +216,10 @@ class _MyHomePageState extends State<MyHomePage> {
       return pasteWidgets;
     }
 
-    pasteWidgets.add(Heading("Pastes"));
-    pasteWidgets.add(Description("A \"paste\" is information that has been published to a publicly facing website designed to share content and is often an early indicator of a data breach."));
+    if (_loadingPasteList || (_pasteList?.length ?? 0) > 0) {
+      pasteWidgets.add(Heading("Pastes"));
+      pasteWidgets.add(Description("A \"paste\" is information that has been published to a publicly facing website designed to share content and is often an early indicator of a data breach."));
+    }
     if (_loadingPasteList) {
       pasteWidgets.addAll(List.generate(2, (int index) => ShimmerCard()));
       return pasteWidgets;
@@ -234,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
     int breachCount = _breachList?.length ?? 0;
     int pasteCount = _pasteList?.length ?? 0;
 
-    if (_loadingBreachList && _loadingPasteList) {
+    if (_loadingBreachList || _loadingPasteList) {
       return Shimmer.fromColors(
           baseColor: Colors.white24,
           highlightColor: Colors.white54,
@@ -588,23 +619,23 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
+}
 
-  void launchURL(BuildContext context, String url) async {
-    try {
-      await launch(
-        url,
-        option: new CustomTabsOption(
+void launchURL(BuildContext context, String url) async {
+  try {
+    await launch(
+      url,
+      option: new CustomTabsOption(
           toolbarColor: Theme.of(context).primaryColor,
           enableDefaultShare: true,
           enableUrlBarHiding: true,
           showPageTitle: true,
           animation: new CustomTabsAnimation.slideIn()
-        ),
-      );
-    } catch (e) {
-      // An exception is thrown if browser app is not installed on Android device.
-      debugPrint(e.toString());
-    }
+      ),
+    );
+  } catch (e) {
+    // An exception is thrown if browser app is not installed on Android device.
+    debugPrint(e.toString());
   }
 }
 
@@ -748,6 +779,24 @@ class ShimmerCard extends StatelessWidget {
   }
 }
 
+class Paragraph extends StatelessWidget {
+  final String text;
+
+  Paragraph(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 16.0,
+        color: Colors.black,
+      ),
+    );
+  }
+
+}
+
 class AboutPage extends StatelessWidget {
 
   @override
@@ -759,34 +808,175 @@ class AboutPage extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.all(12.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              "This app is an open source app made using flutter,"
-                  "you can checkout source code here.", // todo Insert github link
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "This is an open source application made using "
+                  ),
+                  TextSpan(
+                    text: "Flutter SDK",
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline
+                    ),
+                    recognizer: TapGestureRecognizer()..onTap = () {
+                      launchURL(context, "https://flutter.io/");
+                    }
+                  ),
+                  TextSpan(
+                    text: ", you can checkout source code ",
+                  ),
+                  TextSpan(
+                      text: "here",
+                      style: TextStyle(
+                        color: Colors.teal,
+                        decoration: TextDecoration.underline
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = () {
+                        launchURL(context, "https://github.com/callingmedic911/pwned_or_not");
+                      }
+                  ),
+                  TextSpan(
+                    text: ".",
+                  ),
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(top: 12.0),
             ),
-            Text(
-              "It uses haveibeenpwned API by Troy Hunt to fetch published breaches"
-                  "and paste. You can check API here." //todo insert link to API
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "It uses "
+                  ),
+                  TextSpan(
+                    text: "haveibeenpwned",
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline
+                    ),
+                    recognizer: TapGestureRecognizer()..onTap = () {
+                      launchURL(context, "https://haveibeenpwned.com");
+                    }
+                  ),
+                  TextSpan(
+                    text: " API by Troy Hunt to fetch published breaches "
+                        "and pastes. You can check API ", //todo insert link to API
+                  ),
+                  TextSpan(
+                      text: "here",
+                      style: TextStyle(
+                          color: Colors.teal,
+                          decoration: TextDecoration.underline
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = () {
+                        launchURL(context, "https://haveibeenpwned.com/API/v2");
+                      }
+                  ),
+                  TextSpan(
+                    text: ".",
+                  ),
+                ],
+              ),
             ),
-            Text(
-              "Since API does not provide senstive breach information for obivous "
-                  "reason, you have to subscribe to notification service provided "
-                  "haveibeenpwned website" //todo insert link to subs
+            Padding(
+              padding: EdgeInsets.only(top: 12.0),
             ),
-            Text(
+            Paragraph(
+              "Please note, since API does not provide senstive breach information for obivous "
+                  "reasons, you have to subscribe to notification service provided "
+                  "haveibenpwned website" //todo insert link to subs
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 12.0),
+            ),
+            Paragraph(
               "This app uses following packages:"
             ),
-            
+            Padding(
+              padding: EdgeInsets.only(top: 12.0),
+            ),
             //todo insert link to following packages
-            Text("flutter_html_view"),
-            Text("cached_network_image"),
-            Text("flutter_svg"),
-            Text("flutter_custom_tabs"),
-            Text("shimmer"),
-            Text("http"),
+            Paragraph("- http"),
+            Paragraph("- flutter_html_view"),
+            Paragraph("- cached_network_image"),
+            Paragraph("- flutter_svg"),
+            Paragraph("- flutter_custom_tabs"),
+            Paragraph("- shimmer"),
+            Padding(
+              padding: EdgeInsets.only(top: 16.0),
+            ),
+            Text(
+              "Follow Us",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 22.0,
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                CachedNetworkImage(
+                  imageUrl: "https://twitter.com/troyhunt/profile_image?size=original",
+                  width: 80.0,
+                  height: 80.0,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Troy Hunt"),
+                      RaisedButton(
+                          color: const Color(0xFF1DA1F2),
+                          textColor: Colors.white,
+                          child: Text("@troyhunt"),
+                          onPressed: () => launchURL(context, "https://twitter.com/troyhunt"),
+                          shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                CachedNetworkImage(
+                  imageUrl: "https://twitter.com/callingmedic911/profile_image?size=original",
+                  width: 80.0,
+                  height: 80.0,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Aditya Pandey"),
+                      RaisedButton(
+                          color: const Color(0xFF1DA1F2),
+                          textColor: Colors.white,
+                          child: Text("@troyhunt"),
+                          onPressed: () => launchURL(context, "https://twitter.com/callingmedic911"),
+                          shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),
