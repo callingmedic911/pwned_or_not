@@ -906,9 +906,6 @@ class AboutPage extends StatelessWidget {
               Paragraph(
                 "This app uses following dart/flutter packages, available in Dart Pub:"
               ),
-//              Padding(
-//                padding: EdgeInsets.only(top: 12.0),
-//              ),
               //todo insert link to following packages
               Paragraph("- http"),
               Paragraph("- flutter_html_view"),
