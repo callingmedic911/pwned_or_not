@@ -805,179 +805,221 @@ class AboutPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("About PwnedOrNot"),
       ),
-      body: Container(
-        padding: EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.black,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "This is an open source application made using "
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black,
                   ),
-                  TextSpan(
-                    text: "Flutter SDK",
-                    style: TextStyle(
-                      color: Colors.teal,
-                      fontStyle: FontStyle.italic,
-                      decoration: TextDecoration.underline
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: "This is an open source application made using "
                     ),
-                    recognizer: TapGestureRecognizer()..onTap = () {
-                      launchURL(context, "https://flutter.io/");
-                    }
-                  ),
-                  TextSpan(
-                    text: ", you can checkout source code ",
-                  ),
-                  TextSpan(
-                      text: "here",
+                    TextSpan(
+                      text: "Flutter SDK",
                       style: TextStyle(
                         color: Colors.teal,
+                        fontStyle: FontStyle.italic,
                         decoration: TextDecoration.underline
                       ),
                       recognizer: TapGestureRecognizer()..onTap = () {
-                        launchURL(context, "https://github.com/callingmedic911/pwned_or_not");
+                        launchURL(context, "https://flutter.io/");
                       }
-                  ),
-                  TextSpan(
-                    text: ".",
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 12.0),
-            ),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.black,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "It uses "
-                  ),
-                  TextSpan(
-                    text: "haveibeenpwned",
-                    style: TextStyle(
-                      color: Colors.teal,
-                      fontStyle: FontStyle.italic,
-                      decoration: TextDecoration.underline
                     ),
-                    recognizer: TapGestureRecognizer()..onTap = () {
-                      launchURL(context, "https://haveibeenpwned.com");
-                    }
-                  ),
-                  TextSpan(
-                    text: " API by Troy Hunt to fetch published breaches "
-                        "and pastes. You can check API ", //todo insert link to API
-                  ),
-                  TextSpan(
-                      text: "here",
-                      style: TextStyle(
+                    TextSpan(
+                      text: ", you can checkout source code ",
+                    ),
+                    TextSpan(
+                        text: "here",
+                        style: TextStyle(
                           color: Colors.teal,
                           decoration: TextDecoration.underline
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          launchURL(context, "https://github.com/callingmedic911/pwned_or_not");
+                        }
+                    ),
+                    TextSpan(
+                      text: ".",
+                    ),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: "It uses "
+                    ),
+                    TextSpan(
+                      text: "haveibeenpwned",
+                      style: TextStyle(
+                        color: Colors.teal,
+                        fontStyle: FontStyle.italic,
+                        decoration: TextDecoration.underline
                       ),
                       recognizer: TapGestureRecognizer()..onTap = () {
-                        launchURL(context, "https://haveibeenpwned.com/API/v2");
+                        launchURL(context, "https://haveibeenpwned.com");
                       }
+                    ),
+                    TextSpan(
+                      text: " API by Troy Hunt to fetch published breaches "
+                          "and pastes. You can check API ", //todo insert link to API
+                    ),
+                    TextSpan(
+                        text: "here",
+                        style: TextStyle(
+                            color: Colors.teal,
+                            decoration: TextDecoration.underline
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          launchURL(context, "https://haveibeenpwned.com/API/v2");
+                        }
+                    ),
+                    TextSpan(
+                      text: ".",
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8.0),
+              ),
+              Paragraph(
+                "Please note, since API does not provide senstive breach information for obivous "
+                    "reasons, you have to subscribe for notification service provided in "
+                    "haveibenpwned website" //todo insert link to subs
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8.0),
+              ),
+              Paragraph(
+                "This app uses following dart/flutter packages, available in Dart Pub:"
+              ),
+//              Padding(
+//                padding: EdgeInsets.only(top: 12.0),
+//              ),
+              //todo insert link to following packages
+              Paragraph("- http"),
+              Paragraph("- flutter_html_view"),
+              Paragraph("- cached_network_image"),
+              Paragraph("- flutter_svg"),
+              Paragraph("- flutter_custom_tabs"),
+              Paragraph("- shimmer"),
+              Padding(
+                padding: EdgeInsets.only(top: 14.0),
+              ),
+              Text(
+                "Follow Us",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22.0,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 80.0,
+                    height: 80.0,
+                    decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: new CachedNetworkImageProvider("https://twitter.com/troyhunt/profile_image?size=original"),
+                      ),
+                    ),
                   ),
-                  TextSpan(
-                    text: ".",
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Troy Hunt",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          Text(
+                            "Creator of haveibeenpwned",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                          RaisedButton(
+                              color: const Color(0xFF1DA1F2),
+                              textColor: Colors.white,
+                              child: Text("@troyhunt"),
+                              onPressed: () => launchURL(context, "https://twitter.com/troyhunt"),
+                              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 12.0),
-            ),
-            Paragraph(
-              "Please note, since API does not provide senstive breach information for obivous "
-                  "reasons, you have to subscribe to notification service provided "
-                  "haveibenpwned website" //todo insert link to subs
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 12.0),
-            ),
-            Paragraph(
-              "This app uses following packages:"
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 12.0),
-            ),
-            //todo insert link to following packages
-            Paragraph("- http"),
-            Paragraph("- flutter_html_view"),
-            Paragraph("- cached_network_image"),
-            Paragraph("- flutter_svg"),
-            Paragraph("- flutter_custom_tabs"),
-            Paragraph("- shimmer"),
-            Padding(
-              padding: EdgeInsets.only(top: 16.0),
-            ),
-            Text(
-              "Follow Us",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 22.0,
+              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 80.0,
+                    height: 80.0,
+                    decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: new CachedNetworkImageProvider("https://twitter.com/callingmedic911/profile_image?size=original"),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Aditya Pandey",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          Text(
+                            "Developer of this app",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                          RaisedButton(
+                              color: const Color(0xFF1DA1F2),
+                              textColor: Colors.white,
+                              child: Text("@callingmedic911"),
+                              onPressed: () => launchURL(context, "https://twitter.com/callingmedic911"),
+                              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-            Row(
-              children: <Widget>[
-                CachedNetworkImage(
-                  imageUrl: "https://twitter.com/troyhunt/profile_image?size=original",
-                  width: 80.0,
-                  height: 80.0,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text("Troy Hunt"),
-                      RaisedButton(
-                          color: const Color(0xFF1DA1F2),
-                          textColor: Colors.white,
-                          child: Text("@troyhunt"),
-                          onPressed: () => launchURL(context, "https://twitter.com/troyhunt"),
-                          shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                CachedNetworkImage(
-                  imageUrl: "https://twitter.com/callingmedic911/profile_image?size=original",
-                  width: 80.0,
-                  height: 80.0,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text("Aditya Pandey"),
-                      RaisedButton(
-                          color: const Color(0xFF1DA1F2),
-                          textColor: Colors.white,
-                          child: Text("@troyhunt"),
-                          onPressed: () => launchURL(context, "https://twitter.com/callingmedic911"),
-                          shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
