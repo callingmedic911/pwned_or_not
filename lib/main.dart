@@ -40,10 +40,9 @@ class _MyHomePageState extends State<MyHomePage> {
   String _inputEmail;
   List<Breach> _breachList;
   bool _loadingBreachList;
-  String _errorInBreachList;
   List<Paste> _pasteList;
   bool _loadingPasteList;
-  String _errorInPasteList;
+  bool _error = false;
 
   void _setEmail(email) {
     setState(() {
@@ -125,6 +124,23 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget getHomePage() {
+    if (_error) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(Icons.error_outline, size: 140.0, color: Colors.black26,),
+          Text(
+            "Failed to load result.",
+            style: TextStyle(color: Colors.black38),
+          ),
+          Text(
+            "Check network connection.",
+            style: TextStyle(color: Colors.black38),
+          ),
+        ],
+      );
+    }
+
     if (_inputEmail == null || _inputEmail.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -189,11 +205,6 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> getBreachWidgets() {
     List<Widget> breachWidgets = List();
 
-    if (_errorInBreachList != null) {
-      breachWidgets.add(Text(_errorInBreachList));
-      return breachWidgets;
-    }
-
     if (_loadingBreachList || (_breachList?.length ?? 0) > 0) {
       breachWidgets.add(Heading("Breaches"));
       breachWidgets.add(Description("A \"breach\" is an incident where data has been unintentionally exposed to the public."));
@@ -210,11 +221,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> getPasteWidgets() {
     List<Widget> pasteWidgets = List();
-
-    if (_errorInPasteList != null) {
-      pasteWidgets.add(Text(_errorInPasteList));
-      return pasteWidgets;
-    }
 
     if (_loadingPasteList || (_pasteList?.length ?? 0) > 0) {
       pasteWidgets.add(Heading("Pastes"));
@@ -250,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
     int breachCount = _breachList?.length ?? 0;
     int pasteCount = _pasteList?.length ?? 0;
 
-    if ((_loadingBreachList && _loadingPasteList)) {
+    if (_loadingBreachList || _loadingPasteList) {
       return Colors.grey;
     }
 
@@ -579,7 +585,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _inputEmail = account;
       _breachList = null;
       _loadingBreachList = true;
-      _errorInBreachList = null;
+      _error = false;
     });
     getBreaches(account).then((response) {
       setState(() {
@@ -592,7 +598,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _inputEmail = account;
         _breachList = null;
         _loadingBreachList = false;
-        _errorInBreachList = error.toString();
+        _error = true;
       });
     });
   }
@@ -602,7 +608,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _inputEmail = account;
       _pasteList = null;
       _loadingPasteList = true;
-      _errorInPasteList = null;
+      _error = false;
     });
     getPastes(account).then((response) {
       setState(() {
@@ -615,7 +621,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _inputEmail = account;
         _pasteList = null;
         _loadingPasteList = false;
-        _errorInPasteList = error.toString();
+        _error = true;
       });
     });
   }
@@ -914,7 +920,7 @@ class AboutPage extends StatelessWidget {
               Paragraph("- flutter_custom_tabs"),
               Paragraph("- shimmer"),
               Padding(
-                padding: EdgeInsets.only(top: 14.0),
+                padding: EdgeInsets.only(top: 12.0),
               ),
               Text(
                 "Follow Us",
@@ -923,6 +929,9 @@ class AboutPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 22.0,
                 ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 4.0),
               ),
               Row(
                 children: <Widget>[
