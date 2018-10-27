@@ -37,16 +37,16 @@ class _MyHomePageState extends State<MyHomePage> {
   final FocusNode _searchFocus = FocusNode();
   final TextEditingController _controller = new TextEditingController();
   final List<String> menuItems = ["About"];
-  String _inputEmail;
+  String _inputAccount;
   List<Breach> _breachList;
   bool _loadingBreachList;
   List<Paste> _pasteList;
   bool _loadingPasteList;
   bool _error = false;
 
-  void _setEmail(email) {
+  void _setAccount(account) {
     setState(() {
-      _inputEmail = email;
+      _inputAccount = account;
     });
   }
 
@@ -78,9 +78,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       bottom: 12.0,
                     ),
                     border: InputBorder.none,
-                    hintText: "Enter email",
+                    hintText: "Enter account",
                   ),
-                  onSubmitted: (email) => loadResult(email),
+                  onSubmitted: (account) => loadResult(account),
                   focusNode: _searchFocus,
                   controller: _controller,
                 ),
@@ -141,13 +141,13 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
-    if (_inputEmail == null || _inputEmail.isEmpty) {
+    if (_inputAccount == null || _inputAccount.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(Icons.search, size: 140.0, color: Colors.black26,),
           Text(
-            "Enter your email in search bar",
+            "Enter your account in search bar",
             style: TextStyle(color: Colors.black38),
           ),
           Text(
@@ -573,7 +573,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void loadResult(String account) {
     if (account == null || account.isEmpty) {
-      _setEmail(null);
+      _setAccount(null);
     }
 
     loadBreachList(account);
@@ -582,7 +582,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void loadBreachList(String account) {
     setState(() {
-      _inputEmail = account;
+      _inputAccount = account;
       _breachList = null;
       _loadingBreachList = true;
       _error = false;
@@ -595,7 +595,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }).catchError((error) {
       print(error);
       setState(() {
-        _inputEmail = account;
+        _inputAccount = account;
         _breachList = null;
         _loadingBreachList = false;
         _error = true;
@@ -605,7 +605,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void loadPasteList(String account) {
     setState(() {
-      _inputEmail = account;
+      _inputAccount = account;
       _pasteList = null;
       _loadingPasteList = true;
       _error = false;
@@ -618,7 +618,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }).catchError((error) {
       print(error);
       setState(() {
-        _inputEmail = account;
+        _inputAccount = account;
         _pasteList = null;
         _loadingPasteList = false;
         _error = true;
