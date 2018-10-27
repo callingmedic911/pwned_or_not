@@ -50,8 +50,9 @@ Future<List<Paste>> getPastes(account) async {
     // If server returns an OK response, parse the JSON
     List<dynamic> responseJson = json.decode(response.body);
     return responseJson.map((i) => Paste.fromJson(i)).toList();
-  } else if (response.statusCode == 404){
-    // If no result found, return empty list.s
+  } else if (response.statusCode == 404 || response.statusCode == 400){
+    // 404 If no result found, return empty list.s
+    // 404 not valid email address
     return List();
   } else {
     // If that response was not OK, throw an error.
