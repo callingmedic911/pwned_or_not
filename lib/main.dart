@@ -308,8 +308,8 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
-    String pwnedText = "Pwned on $breachCount breached sites";
-    String andPasteText = " and found $pasteCount pastes";
+    String pwnedText = "Pwned on $breachCount breached ${breachCount > 1 ? "sites" : "site"}";
+    String andPasteText = " and found $pasteCount ${breachCount > 1 ? "pastes" : "paste"}";
     String pasteText = "Found $pasteCount pastes";
 
     if (breachCount > 0) {
