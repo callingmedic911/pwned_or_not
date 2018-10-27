@@ -37,7 +37,6 @@ Future<List<Breach>> getBreaches(account) async {
 }
 
 Future<List<Paste>> getPastes(account) async {
-  print(pastedAccount + account);
   final response =
   await http.get(
       pastedAccount + account,
